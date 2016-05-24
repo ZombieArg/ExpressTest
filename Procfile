@@ -1,1 +1,1 @@
-web: node index.js
+web: npm start ps:scale web=1
