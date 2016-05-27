@@ -2,7 +2,32 @@
 
 /*Get 'home' page*/
 module.exports.homeList = function(req, res){
-	res.render('locations-list', {title: 'Home'});
+	res.render('locations-list', {
+		title: 'Loc8r - find places to work with wifi',
+		pageHeader: {
+			title: 'Loc8r',
+			strapline: 'Find places to work with wifi near you!'
+		},
+		locations: [{
+			name: 'Starcups',
+			address: '125 High Street, Reading, RG6 1PS',
+			rating: 3,
+			facilities: ['Hot Drinks','Food','Premium wifi'],
+			distance: '100m'
+		},{
+			name: 'Cafe Hero',
+			address: '135 High Street, Reading, RG6 1PS',
+			rating: 4,
+			facilities: ['Hot Drinks','Food','Premium wifi'],
+			distance: '200m'
+		},{
+			name: 'Burger Queen',
+			address: '150 High Street, Reading, RG6 1PS',
+			rating: 1,
+			facilities: ['Food','Premium wifi'],
+			distance: '300m'
+		}]
+	});
 };
 
 /*Get 'Location info' page*/
