@@ -5,9 +5,9 @@
   "scripts": {
     "start": "node ./bin/www"
   },
-  "engines":{
-	"node": "~0.10.40",
-	"npm": "~1.4.28"
+  "engines": {
+    "node": "~0.10.40",
+    "npm": "~1.4.28"
   },
   "dependencies": {
     "body-parser": "~1.13.2",
@@ -17,7 +17,9 @@
     "express": "~4.13.1",
     "jade": "~1.11.0",
     "jquery": "^2.2.3",
+    "mongoose": "^4.4.19",
     "morgan": "~1.6.1",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "readline": "0.0.x"
   }
 }

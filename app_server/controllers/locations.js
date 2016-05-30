@@ -14,7 +14,7 @@ module.exports.homeList = function(req, res){
 			address: '125 High Street, Reading, RG6 1PS',
 			rating: 3,
 			facilities: ['Hot Drinks','Food','Premium wifi'],
-			distance: '100m'
+			distance: '150m'
 		},{
 			name: 'Cafe Hero',
 			address: '135 High Street, Reading, RG6 1PS',
