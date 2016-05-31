@@ -47,22 +47,35 @@ module.exports.locationInfo = function(req, res){
 			address: '125 High Street, Reading, RG6 1PS',
 			rating: 3,
 			facilities: ['Hot Drinks','Food','Premium wifi'],
-			coordinates: {
-				latitude: '51.455041',
-				longitude: '-0.9690884'
+			coords: {
+				lat: '51.455041',
+				long: '-0.9690884'
 			},
-			openDays: ['Monday - Friday : 7:00am - 7:00pm','Saturday : 8:00am - 5:00pm', 'Sunday : Closed']
+			openingTimes: [{
+				days: 'Monday - Friday',
+				opening: '7:00am',
+				closing: '7:00pm',
+				closed: false
+			},{
+				days: 'Saturday',
+				opening: '8:00am',
+				closing: '5:00pm',
+				closed: false
+			},{
+				days: 'Sunday',
+				closed: true
+			}]
 		},
 		reviews:[{
 			author: 'Eduardo Pan',
 			rating: 4,
-			commentDate: '14 July 2016',
-			commentText: 'What a great place. I can&rsquo;t say enough good thing about it.'
+			timeStamp: '14 July 2016',
+			reviewText: 'What a great place. I can&rsquo;t say enough good thing about it.'
 		},{
 			author: 'Sigmund Freud',
 			rating: 2,
-			commentDate: '17 July 2016',
-			commentText: 'It was okay. Coffe sucks, but the wifi was fast.'
+			timeStamp: '17 July 2016',
+			reviewText: 'It was okay. Coffe sucks, but the wifi was fast.'
 		}]
 	});
 };

@@ -19,7 +19,7 @@ block content
           .panel-heading
             h2.panel-title Open hours
           .panel-body
-            +ouputOpendays(location.openDays)
+            +ouputOpendays(location.openingTimes)
          .panel.panel-primary
           .panel-heading
             h2.panel-title Facilities
@@ -30,7 +30,7 @@ block content
            .panel-heading
              h2.panel-title Location map
            .panel-body
-             img.img-responsive.img-rounded(src='http://maps.googleapis.com/maps/api/staticmap?center=#{location.coordinates.latitude},#{location.coordinates.longitude}&zoom=17&size=400x350&sensor=false&markers=#{location.coordinates.latitude},#{location.coordinates.longitude}&scale=2')
+             img.img-responsive.img-rounded(src='http://maps.googleapis.com/maps/api/staticmap?center=#{location.coords.lat},#{location.coords.long}&zoom=17&size=400x350&sensor=false&markers=#{location.coords.lat},#{location.coords.long}&scale=2')
      .row
        .col-xs-12
          .panel.panel-primary.review-panel
@@ -46,9 +46,9 @@ block content
                     span.rating
                      +outputRating(review.rating)
                     span.reviewAuthor= review.author
-                    small.reviewTimestamp= review.commentDate
+                    small.reviewTimestamp= review.timeStamp
                   .col-xs-12
-                    p!= review.commentText
+                    p!= review.reviewText
    .col-xs-12.col-md-3
      p.lead!=  sidebar.lead
      p!= sidebar.secondary

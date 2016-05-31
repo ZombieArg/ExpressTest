@@ -6,20 +6,20 @@ var mongoose = require('mongoose');
 
 //Uri Local
 var dbURI = 'mongodb://localhost/Loc8r';
-var dbURILog = 'mongodb://localhost/Loc8rLog';
+var dbURILive = 'mongodb://ZombieArg:32064475Morsi@ds019893.mlab.com:19893/loc8r-dev';
 
 //Connect
-mongoose.connect(dbURI);
-var logDB = mongoose.createConnection(dbURILog);
+mongoose.connect(dbURILive);
+//var logDB = mongoose.createConnection(dbURILog);
 
 //Connected
 mongoose.connection.on('connected',function () {
-   console.log('Mongoose connected to ' + dbURI);
+   console.log('Mongoose connected to ' + dbURILive);
 });
 
-logDB.on('connected',function () {
+/*logDB.on('connected',function () {
     console.log('Mongoose connected to ' + dbURILog);
-});
+});*/
 
 //Error
 mongoose.connection.on('error',function (err) {
@@ -32,9 +32,9 @@ mongoose.connection.on('disconnected',function () {
 });
 
 //Close
-logDB.close(function () {
+/*logDB.close(function () {
     console.log('Mongoose log disconnected from ' + dbURILog);
-});
+});*/
 
 //Function to close Mongoose Connection
 var gracefulShutdown = function (msg, callback) {

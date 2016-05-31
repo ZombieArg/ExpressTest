@@ -11,4 +11,7 @@ mixin outputFacilities(facilities)
 
 mixin ouputOpendays(openDays)
   each day in openDays
-    p= day
+   if(day.closed == false)
+    p= day.days + " : " + day.opening + " - " + day.closing
+   else
+    p= day.days + " : Closed"
