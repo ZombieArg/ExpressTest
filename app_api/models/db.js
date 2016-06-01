@@ -9,12 +9,12 @@ var dbURI = 'mongodb://localhost/Loc8r';
 var dbURILive = 'mongodb://ZombieArg:32064475Morsi@ds019893.mlab.com:19893/loc8r-dev';
 
 //Connect
-mongoose.connect(dbURILive);
+mongoose.connect(dbURI);
 //var logDB = mongoose.createConnection(dbURILog);
 
 //Connected
 mongoose.connection.on('connected',function () {
-   console.log('Mongoose connected to ' + dbURILive);
+   console.log('Mongoose connected to ' + dbURI);
 });
 
 /*logDB.on('connected',function () {
