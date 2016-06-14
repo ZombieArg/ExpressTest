@@ -10,6 +10,7 @@ block content
          small &nbsp;#{pageHeader.strapline}
   .row
     .col-xs-12.col.col-sm-8
+      .error= message
       .row.list-group
         each location in locations
          .col-xs-12.list-group-item
@@ -17,7 +18,7 @@ block content
            a(href='/locations')= location.name
            small &nbsp;
              +outputRating(location.rating)
-           span.badge.pull-right.badge-default= location.distance
+           span.badge.pull-right.badge-default= location.distanceMeters
           p.address= location.address
           p
            +outputFacilities(location.facilities)
