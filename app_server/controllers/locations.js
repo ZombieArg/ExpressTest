@@ -55,6 +55,26 @@ var _formatDistance = function ( distance ) {
 	}
 };
 
+var _showErrors = function (req, res, status ) {
+	var title, content;
+
+	if(status === 404){ // if status passed through is 404, set title and content for page
+		title = "404, page not found";
+		content = "Oh dear, Looks like we can't find this page, sorry.";
+	}else{ //Otherwise set a generic catch-call message
+		title = status + "Something's gone wrong";
+		content = "Something's, somewhere, has gone  just a little bit wrong.";
+	}
+
+	res.status(status); //Use status parameter to set response status
+
+	//Send data to view to be compiled and sent to browser
+	res.render('generic-text',{
+		title: title,
+		content: content
+	});
+};
+
 //External function to render the homepage
 var renderHomepage = function (req, res, responseBody) {
 	var message; //Define variable to hold a message
@@ -80,11 +100,25 @@ var renderHomepage = function (req, res, responseBody) {
 	});
 };
 
+var renderDetailPage = function ( req, res, locDetail) { //Add new parameter for data as needed in function definition
+	res.render('location-info', {
+		title: locDetail.name,  //Reference specific item of data  as needed  in function
+		pageHeader: {
+			title: locDetail.name
+		},
+		sidebar: {
+			lead: 'Simon&rsquo;s cafe is on Loc8r because it has accessible wifi and space to sit down with your laptop and get some work done.',
+			secondary: 'If you&rsquo;ve been and you like it - or if you don&rsquo;t - please leave a review to help other people just like you.'
+		},
+		location: locDetail //Pass full locDetail data object to view, containing all details
+	});
+};
+
 /*Get 'home' page*/
 module.exports.homeList = function(req, res){
 	var requestOptions, path;
 
-	path = '/api/locations'; //Set path for API request (Server is alredy defined at top of the file)
+	path = '/api/locations'; //Set path for API request (Server is already defined at top of the file)
 
 	requestOptions = {
 		url: apiOptions.server + path, //Define URL of API call to be made
@@ -115,48 +149,36 @@ module.exports.homeList = function(req, res){
 
 /*Get 'Location info' page*/
 module.exports.locationInfo = function(req, res){
-	res.render('location-info', {
-		title: 'Location info',
-		pageHeader: {
-			title: 'Starcups',
-		},
-		sidebar: {
-			lead: 'Simon&rsquo;s cafe is on Loc8r because it has accessible wifi and space to sit down with your laptop and get some work done.',
-			secondary: 'If you&rsquo;ve been and you like it - or if you don&rsquo;t - please leave a review to help other people just like you.'
-		},
-		location: {
-			name: 'Starcups',
-			address: '125 High Street, Reading, RG6 1PS',
-			rating: 3,
-			facilities: ['Hot Drinks','Food','Premium wifi'],
-			coords: [-0.9690884, 51.455041],
-			openingTimes: [{
-				days: 'Monday - Friday',
-				opening: '7:00am',
-				closing: '7:00pm',
-				closed: false
-			},{
-				days: 'Saturday',
-				opening: '8:00am',
-				closing: '5:00pm',
-				closed: false
-			},{
-				days: 'Sunday',
-				closed: true
-			}]
-		},
-		reviews:[{
-			author: 'Eduardo Pan',
-			rating: 4,
-			timeStamp: '14 July 2016',
-			reviewText: 'What a great place. I can&rsquo;t say enough good thing about it.'
-		},{
-			author: 'Sigmund Freud',
-			rating: 2,
-			timeStamp: '17 July 2016',
-			reviewText: 'It was okay. Coffe sucks, but the wifi was fast.'
-		}]
+	var requestOption, path;
+
+	path = '/api/locations/' + req.params.locationid; //Get locationid parameter from URL  and append it to API path
+
+	//Set all request option needed to call API
+	requestOption = {
+		url: apiOptions.server + path,
+		method: "GET",
+		json: {}
+	};
+
+
+	request(requestOption, function (err, response, body) {
+
+		if(response.statusCode === 200) {
+			console.log(body);
+			var data = body; //Create copy of returned data in new variable
+
+			data.coords = {
+			 lng: body.coords[0],
+			 lat: body.coords[1]
+			};
+
+			renderDetailPage(req, res, data); //Call renderDetailPage function when API has responded
+		}else {
+			_showErrors(req, res,  response.statusCode);
+		}
+
 	});
+
 };
 
 /*Get 'Add review' page*/

@@ -15,3 +15,19 @@ mixin ouputOpendays(openDays)
     p= day.days + " : " + day.opening + " - " + day.closing
    else
     p= day.days + " : Closed"
+
+
+mixin formatDate(dateString)
+    //Convert date provided from string to date object
+    -var date = new Date(dateString);
+    -console.log(dateString);
+    -console.log(date);
+    //Set array of values for names of months
+    -var monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    //Use javascript data methods to extract and convert  required parts of date
+    -var d = date.getDate();
+    -var m = monthNames[date.getMonth()];
+    -var y = date.getFullYear();
+    //Put parts back together in desired format and render output
+    -var output = d + ' ' + m + ' ' + y;
+    =output
