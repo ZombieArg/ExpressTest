@@ -62,7 +62,7 @@ var _showErrors = function (req, res, status ) {
 		title = "404, page not found";
 		content = "Oh dear, Looks like we can't find this page, sorry.";
 	}else{ //Otherwise set a generic catch-call message
-		title = status + "Something's gone wrong";
+		title = status + " Something's gone wrong";
 		content = "Something's, somewhere, has gone  just a little bit wrong.";
 	}
 
@@ -74,6 +74,40 @@ var _showErrors = function (req, res, status ) {
 		content: content
 	});
 };
+
+//New function accepts cakkback as third parameter and contains all code  that use to be in locationInfo controller
+var getLocationInfo = function (req, res, callback) {
+	var requestOption, path;
+
+	path = '/api/locations/' + req.params.locationid; //Get locationid parameter from URL  and append it to API path
+
+	//Set all request option needed to call API
+	requestOption = {
+		url: apiOptions.server + path,
+		method: "GET",
+		json: {}
+	};
+
+
+	request(requestOption, function (err, response, body) {
+
+		if(response.statusCode === 200) {
+
+			var data = body; //Create copy of returned data in new variable
+
+			data.coords = {
+				lng: body.coords[0],
+				lat: body.coords[1]
+			};
+
+			callback(req, res, data); //Call Callback instead of a named function when API has responded with success
+		}else {
+			_showErrors(req, res,  response.statusCode);
+		}
+
+	});
+};
+
 
 //External function to render the homepage
 var renderHomepage = function (req, res, responseBody) {
@@ -114,6 +148,19 @@ var renderDetailPage = function ( req, res, locDetail) { //Add new parameter for
 	});
 };
 
+//Render review form named function
+var renderReviewForm = function (req, res, locDetail) {
+	res.render('location-review-form', {
+		title: 'Review ' + locDetail.name + ' on Loc8r',
+		pageHeader: {
+			title: 'Review ' + locDetail.name
+		},
+		error: req.query.err //Send new  error variable to the view, passing it query parameter when it exist
+	});
+};
+
+
+
 /*Get 'home' page*/
 module.exports.homeList = function(req, res){
 	var requestOptions, path;
@@ -149,44 +196,57 @@ module.exports.homeList = function(req, res){
 
 /*Get 'Location info' page*/
 module.exports.locationInfo = function(req, res){
-	var requestOption, path;
 
-	path = '/api/locations/' + req.params.locationid; //Get locationid parameter from URL  and append it to API path
-
-	//Set all request option needed to call API
-	requestOption = {
-		url: apiOptions.server + path,
-		method: "GET",
-		json: {}
-	};
-
-
-	request(requestOption, function (err, response, body) {
-
-		if(response.statusCode === 200) {
-			console.log(body);
-			var data = body; //Create copy of returned data in new variable
-
-			data.coords = {
-			 lng: body.coords[0],
-			 lat: body.coords[1]
-			};
-
-			renderDetailPage(req, res, data); //Call renderDetailPage function when API has responded
-		}else {
-			_showErrors(req, res,  response.statusCode);
-		}
-
+	//in locationInfo controller call getLocationInfo function, passing a callback function that will call renderDetailPage function upon completion
+	getLocationInfo(req, res, function (req, res, responseData) {
+		renderDetailPage(req,res,responseData);
 	});
 
 };
 
 /*Get 'Add review' page*/
 module.exports.addReview = function(req, res){
-	res.render('location-review-form', {
-		title: 'Add Review',
-		pageHeader: {
-			title: 'Starcups'
-		}
+	getLocationInfo(req, res, function (req, res, responseData) {
+		renderReviewForm(req,res,responseData);
 	});
+};
+
+/*POST 'Add review' form*/
+module.exports.doAddReview = function(req, res){
+	var requestOptions, path, locationid, postdata;
+
+	locationid = req.params.locationid;
+
+	path = "/api/locations/" + locationid + "/reviews"; //Get location ID from URL to construct the API call
+
+	//Create data object to send to API using submited form data
+	postdata = {
+		author: req.body.name,
+		rating: parseInt(req.body.rating,10),
+		reviewText: req.body.review
+	};
+
+	//Set request option, including path, setting POST method and passing submitted form data into JSON parameter
+	requestOptions = {
+		url: apiOptions.server + path,
+		method: "POST",
+		json: postdata
+	};
+
+
+	if(!postdata.author || !postdata.rating || !postdata.reviewText){ //IF any of these required data fields are falsey, then redirect to Add review page, appending query string used to display error
+		res.redirect('/location/' + locationid + '/review/new?err=val');
+	}else{
+		//Make request
+		request(requestOptions, function (err, response, body) {
+			//Redirects to Details page if review was added succesfully or show or show and error page if API returned an error
+			if(response.statusCode === 201){
+				res.redirect('/location/' + locationid);
+			} else if(response.statusCode === 400 && body.name && body.name === "ValidationError"){ //Add in check to see if status is 400, if body has a name and if that name is ValidationError
+				res.redirect('/location/' + locationid + '/review/new?err=val'); //If true redirects to review form , passing an error flag in query string
+			}else {
+				_showErrors(req, res, res.statusCode);
+			}
+		});
+	}
 };

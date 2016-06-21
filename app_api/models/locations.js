@@ -16,7 +16,7 @@ var openingTimeSchema = new mongoose.Schema({
 var reviewSchema = new mongoose.Schema({
     author: {type: String, required: true},
     rating: {type: Number, required: true, min: 0, max: 5},
-    reviewText: String,
+    reviewText: {type: String, required: true}, //Make each of these paths a required field because if any of them are missing, a review won't make sense
     createdOn: {type: Date, "default": Date.now}
 });
 

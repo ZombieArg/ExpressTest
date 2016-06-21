@@ -30,7 +30,8 @@ var doAddReview = function (req, res, location) {
       location.save(function (err, location) {
          var thisReview;
           if(err){
-              sendJsonResponse(res, 404, err);
+              console.log(err);
+              sendJsonResponse(res, 400, err);
           }else{
               //On successful save operation call function to update average rating
               updateAverageRating(location._id);
