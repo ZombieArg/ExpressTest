@@ -1,5 +1,5 @@
 doctype html
-html
+html(ng-app='loc8rApp')
   head
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     title= title
@@ -26,6 +26,8 @@ html
      .row
        .col-xs-12
          small &copy Eduardo Pan 2016
+  script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js')
+  script(src='/javascripts/loc8rApp.js')
   script(src='/javascripts/jquery.min.js')
   script(src='/javascripts/bootstrap.min.js')
   script(src='/javascripts/validation.js')

@@ -155,7 +155,8 @@ var renderReviewForm = function (req, res, locDetail) {
 		pageHeader: {
 			title: 'Review ' + locDetail.name
 		},
-		error: req.query.err //Send new  error variable to the view, passing it query parameter when it exist
+		error: req.query.err, //Send new  error variable to the view, passing it query parameter when it exist
+		url: req.originalUrl
 	});
 };
 
@@ -163,7 +164,7 @@ var renderReviewForm = function (req, res, locDetail) {
 
 /*Get 'home' page*/
 module.exports.homeList = function(req, res){
-	var requestOptions, path;
+	/*var requestOptions, path;
 
 	path = '/api/locations'; //Set path for API request (Server is already defined at top of the file)
 
@@ -190,8 +191,9 @@ module.exports.homeList = function(req, res){
 		}
 		renderHomepage(req, res, data);
 
-	});
+	});*/
 
+	renderHomepage(req, res);
 };
 
 /*Get 'Location info' page*/

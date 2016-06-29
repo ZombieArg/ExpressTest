@@ -23,7 +23,7 @@ var theEarth = (function () {
     };
 
     var getMetersFromDistanceInKm = function (distanceKM) {
-        var earthRadiusMeters = earthRadius * 100;
+        var earthRadiusMeters = earthRadius * 1000;
 
         return parseFloat((distanceKM * earthRadiusMeters) / earthRadius);
     };
