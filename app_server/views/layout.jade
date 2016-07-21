@@ -20,14 +20,22 @@ html(ng-app='loc8rApp')
          a(href='/about') About
 
   .container
-    block content
+    div(ng-view)
+     block content
 
     footer
      .row
        .col-xs-12
          small &copy Eduardo Pan 2016
-  script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js')
-  script(src='/javascripts/loc8rApp.js')
+  script(src='/angular/angular.min.js')
+  script(src='/lib/angular-route.min.js')
+  script(src='/angular/loc8r.min.js')
+  //- script(src='/app.js')
+  //- script(src='/home/home.controller.js')
+  //- script(src='/common/services/loc8rData.service.js')
+  //- script(src='/common/services/geolocation.service.js')
+  //- script(src='/common/filters/formatDistance.filter.js')
+  //- script(src='/common/directives/ratingStars/ratingStar.directive.js')
   script(src='/javascripts/jquery.min.js')
   script(src='/javascripts/bootstrap.min.js')
   script(src='/javascripts/validation.js')

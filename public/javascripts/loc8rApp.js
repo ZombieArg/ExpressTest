@@ -78,10 +78,10 @@ var _isNumeric = function (n) {
 
 var ratingStars = function () { //Create a new function ratingStar and return a basic template, binding to rating of location
     return {
-        scope:{ //Add scope option to directive definition to create isolate scope
+        scope:{ //Add scope option to directives definition to create isolate scope
             thisRating: "=rating" //Create new variable thisRating and tell Angunlar to get value from attribute called rating
         },
-        templateUrl: "/angular/rating-stars.html" //Change template to templateUrl and set path to HTML file we want to use
+        templateUrl: "/angular/rating-stars.template.html" //Change template to templateUrl and set path to HTML file we want to use
     }
 };
 
@@ -108,6 +108,6 @@ var formatDistance = function () { //To be used as Angular filter formatDistance
 angular.module('loc8rApp')
     .controller('locationListCtrl', locationListCtrl) //Get app module and assign controller to myController, include controller code in named function
     .filter('formatDistance', formatDistance)
-    .directive('ratingStars', ratingStars) //Register directive with application
+    .directive('ratingStars', ratingStars) //Register directives with application
     .service('loc8rData', loc8rData) //Register service application
     .service('geolocation', geolocation);

@@ -10,3 +10,8 @@ module.exports.about = function(req, res){
 		content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed lorem ac nisi dignissim accumsan.'
 	});
 };
+
+
+module.exports.angularApp = function(req, res){
+	res.render('layout', {title: 'Loc8r'});
+};
