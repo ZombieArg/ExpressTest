@@ -50,7 +50,12 @@ function homeCtrl($scope, loc8rData, geolocation) {
         })
     };
 
-    geolocation.getPosition(vm.getData, vm.showError, vm.noGeo); //Pass the function to our geolocation services;    
+    geolocation.getPosition(vm.getData, vm.showError, vm.noGeo); //Pass the function to our geolocation services;
+
+    if(window.location.pathname !== '/'){
+        window.location.href = '/#' + window.location.pathname;
+    }
+
 }
 
 }) ();

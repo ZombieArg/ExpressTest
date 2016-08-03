@@ -15,8 +15,18 @@ function loc8rData ($http) { //New named function to return data
         return  $http.get('/api/locations?lng='+lng+'&lat='+lat); //Remove hardcoded values in API call and replace with lng and lat variables
     };
 
+    var locationById = function (locationid) { //Create a new locationById method, accepting locationid parameter
+        return  $http.get('/api/locations/' + locationid); //That uses locationid in a call to API
+    };
+
+    var addReviewById = function (locationid, data) {
+        return  $http.post('/api/locations/' + locationid + '/reviews/', data); //That uses locationid in a call to API
+    };
+
     return  {
-        locationByCoords: locationByCoords //Return locationByCoords function making it accesible as method of service
+        locationByCoords: locationByCoords,//Return locationByCoords function making it accesible as method of service
+        locationById: locationById, //Expose locationById  methos so we can call it from the controller
+        addReviewById: addReviewById
     }
 }
 
