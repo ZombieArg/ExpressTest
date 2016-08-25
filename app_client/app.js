@@ -21,7 +21,17 @@ function config($routeProvider, $locationProvider) { //Module config function to
         })
         .when('/location/:locationid',{  //Set new path to about
             templateUrl: "/locationDetail/locationDetail.view.html", //Define path for generic view template
-            controller: 'locationDetailCtrl', //Tell route to use controller called 'aboutCtrl'
+            controller: 'locationDetailCtrl', //Tell route to use controller called 'locationDetailCtrl'
+            controllerAs: 'vm' //Add controllerAs option to route definition, passing variable name as string
+        })
+        .when('/register',{  //Set new path to about
+            templateUrl: "/auth/register/register.view.html", //Define path for generic view template
+            controller: 'registerCtrl', //Tell route to use controller called 'registerCtrl'
+            controllerAs: 'vm' //Add controllerAs option to route definition, passing variable name as string
+        })
+        .when('/login',{  //Set new path to about
+            templateUrl: "/auth/login/login.view.html", //Define path for generic view template
+            controller: 'loginCtrl', //Tell route to use controller called 'registerCtrl'
             controllerAs: 'vm' //Add controllerAs option to route definition, passing variable name as string
         })
         .otherwise({redirecTo: '/'});

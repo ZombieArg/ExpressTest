@@ -4,6 +4,7 @@
 
 var mongoose =  require('mongoose');
 var loc = mongoose.model('Location');
+var User = mongoose.model('User'); //Ensure the model user is available
 
 var sendJsonResponse = function (res, status, content) {
     res.status(status);
@@ -11,7 +12,7 @@ var sendJsonResponse = function (res, status, content) {
 };
 
 //Add review when provided with a parent document
-var doAddReview = function (req, res, location) {
+var doAddReview = function (req, res, location, author) { //Add an author parameter to function definition
   if(!location){
       sendJsonResponse(res, 404, {
           "Message" : "location not found"
@@ -20,7 +21,7 @@ var doAddReview = function (req, res, location) {
 
       //Push new data into subdocument array
       location.reviews.push({
-          author : req.body.author,
+          author : author, //Use author parameter when creating review subdocument
           rating : req.body.rating,
           reviewText : req.body.reviewText
       });
@@ -85,24 +86,55 @@ var doSetAverageRating = function (location) {
 
 };
 
+var getAuthor = function (req, res, callback) {
+
+    if(req.payload && req.payload.email){ //Validate that JWT information is on the request object
+        User.findOne({ //User email address to find user
+            email : req.payload.email})
+            .exec(function (err, user) {
+                if(!user){
+                    sendJsonResponse(res, 404, {
+                        "message" : "User not found"
+                    });
+                    return;
+                }else if(err){
+                    console.log(err);
+                    sendJsonResponse(res, 404, err);
+                    return;
+                }
+
+                callback(req, res, user.name);
+            });
+
+    }else{
+        sendJsonResponse(res, 404, {
+            "message" : "User not found"
+        });
+        return;
+    }
+
+};
+
+
 /*Create review*/
 module.exports.reviewsCreate = function (req, res) {
-    var locationId = req.params.locationid;
 
-        if(locationId){
-            loc.findById(locationId).select("reviews").exec( function (err, location) {
+    getAuthor(req, res, function (req, res, userName) { //Call getAuthor function, and pass original controller code in as a callback; pass user's name into callback
+
+        if(req.params.locationid){
+            loc.findById(req.params.locationid).select("reviews").exec( function (err, location) {
               if(err){
                   sendJsonResponse(res, 404, err);
               }else{
                   //Successful find operation will call new function to add review, passing request, response, and location objects
-                  doAddReview(req, res, location);
+                  doAddReview(req, res, location, userName); //Pass user's name into doAddReview function
               }
             });
         }else{
             sendJsonResponse(res, 404, {"message" : "Not Found, locationId required"});
         }
 
-
+    }); //Close getAuthor function
 };
 
 /*Get review*/

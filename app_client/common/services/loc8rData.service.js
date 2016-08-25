@@ -8,8 +8,8 @@ angular.module('loc8rApp').service('loc8rData', loc8rData);
 
 //Service
 
-    loc8rData.$inject = ['$http'];
-function loc8rData ($http) { //New named function to return data
+    loc8rData.$inject = ['$http', 'authentication']; //Inject authentication service
+function loc8rData ($http, authentication) { //New named function to return data
 
     var locationByCoords = function (lat, lng) { //Create new function inside service function, accepting two parameters, lat and lng
         return  $http.get('/api/locations?lng='+lng+'&lat='+lat); //Remove hardcoded values in API call and replace with lng and lat variables
@@ -20,7 +20,12 @@ function loc8rData ($http) { //New named function to return data
     };
 
     var addReviewById = function (locationid, data) {
-        return  $http.post('/api/locations/' + locationid + '/reviews/', data); //That uses locationid in a call to API
+        return  $http.post('/api/locations/' + locationid + '/reviews/', data,
+            {
+                headers: {
+                    Authorization: 'Bearer ' + authentication.getToken() //Add an options parameter to pass a new http header containing the JWT
+                }
+            }); //That uses locationid in a call to API
     };
 
     return  {

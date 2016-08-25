@@ -83,3 +83,4 @@ process.on('SIGTERM',function () {
 
 //Schema
 require('./locations');
+require('./users');

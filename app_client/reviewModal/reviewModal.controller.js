@@ -25,7 +25,7 @@
         vm.onSubmit = function () {
             vm.formError = ""; //Reset any existing errors
 
-            if(!vm.formData.name || !vm.formData.rating || !vm.formData.reviewText){ //IF any form fields are false set an error message
+            if(!vm.formData.rating || !vm.formData.reviewText){ //IF any form fields are false set an error message
                 vm.formError = "All fields are required, please try again";
                 return false;
             }else{
@@ -36,7 +36,6 @@
         
         vm.doAddReview = function (locationid , formData) {
             loc8rData.addReviewById(locationid, { //New functions formats data and send it to new service method
-                author: formData.name,
                 rating: formData.rating,
                 reviewText: formData.reviewText
             })
